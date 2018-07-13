@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
+import { connect } from 'react-redux';
+import { createAccount } from '../actions';
 
 class SignUp extends Component {
     renderInputs(props){
@@ -7,7 +9,7 @@ class SignUp extends Component {
         return (
             <div className={`form-group ${props.className}`}>
                 <label>{props.label}</label>
-                <input {...props.input} type="text" className={`form-control ${error ? 'is-invalid' : ''}`}/>
+                <input {...props.input} type={props.type || 'text'} className={`form-control ${error ? 'is-invalid' : ''}`} />
                 <div className="invalid-feedback">
                     {error}
                 </div>
@@ -17,22 +19,24 @@ class SignUp extends Component {
 
     handleSignUp(values){
         console.log('Form Values:', values);
+
+        this.props.createAccount(values);
     }
 
     render(){
         const { handleSubmit } = this.props;
 
         return (
-            <form onSubmit={handleSubmit(this.handleSignUp)}>
+            <form onSubmit={handleSubmit(this.handleSignUp.bind(this))}>
                 <h1 className="text-center">Create Account</h1>
                 <div className="row">
                     <Field className="col-6 offset-3" name="email" component={this.renderInputs} label="Email"/>
                 </div>
                 <div className="row">
-                    <Field className="col-6 offset-3"  name="password" component={this.renderInputs} label="Password"/>
+                    <Field type="password" className="col-6 offset-3"  name="password" component={this.renderInputs} label="Password"/>
                 </div>
                 <div className="row">
-                    <Field className="col-6 offset-3"  name="confirmPassword" component={this.renderInputs} label="Confirm Password"/>
+                    <Field type="password" className="col-6 offset-3"  name="confirmPassword" component={this.renderInputs} label="Confirm Password"/>
                 </div>
                 <div className="row">
                     <div className="d-flex col-6 offset-3 justify-content-end">
@@ -65,4 +69,4 @@ SignUp = reduxForm({
     validate: validate
 })(SignUp);
 
-export default SignUp;
+export default connect(null, { createAccount:createAccount })(SignUp);
