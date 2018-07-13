@@ -7,8 +7,6 @@ import About from './about';
 import SecretList from './secret_list';
 import MovieQuote from './movie_quote';
 
-
-
 const App = () => (
     <div>
         <Nav />
